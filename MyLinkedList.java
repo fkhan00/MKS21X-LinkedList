@@ -58,11 +58,74 @@ public class MyList
   {
     Node setUp = new Node(value, null, end);
     end.setNext(setUp);
+    setUp.setPrevious(end);
+    end = setUp;
+    size ++;
+    return true;
   }
+  public boolean contains(int item)
+  {
+    Node power = new Node(3, null, null);
+    power.setNext(start);
+    while(power.getNext() != null)
+    {
+        if(power.getData() == item)
+        {
+          return true;
+        }
+        power = power.getNext();
+    }
+    return false;
+  }
+  public int remove(int index)
+  {
+    this.getNext().setPrevious(this.getPrevious());
+    this.getPrevious().setNext(this.getNext());
+    this.get(index).setNext(null);
+    this.get(index).setPrevious(null);
+    size --;
+    return this.getData();
+  }
+  public int indexOf(int value)
+  {
+    if(! this.contains(value))
+    {
+      return -1;
+    }
+    Node power = new Node(3, null, null);
+    power.setNext(start);
+    int counter = 0;
+    while( power.getData() != value)
+    {
+      counter ++;
+      power = power.getNext();
+    }
+    return counter;
+  }
+  public boolean remove(int value)
+  {
+    if(this.indexOf(value) == -1)
+    {
+      return false;
+    }
+    remove(this.indexOf(value));
+    return true;
+  }
+  public Integer get(int index)
+  {
+    int counter = 0;
+    Node power = new Node(3, null, null);
+    power.setNext(start);
+    while(power.getNext() != null && power.)
+    {
+      counter ++;
+    }
+  }
+
   public String toString()
   {
     Node power = new Node(3, null, null);
-    power.setNext(start.getNext());
+    power.setNext(start);
     String output = "[";
     while(power.getNext() != null)
     {
@@ -72,5 +135,8 @@ public class MyList
     output += "]";
     return output;
     power.setNext(null);
+    power.setPrevious(null);
   }
+
+
 }
