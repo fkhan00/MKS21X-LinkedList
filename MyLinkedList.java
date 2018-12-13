@@ -1,11 +1,11 @@
-public class MyList
+public class MyLinkedList
 {
-  private class Nodes
+  public class Nodes
   {
     public int data;
     public Node next;
     public Node previous;
-    public Node(int newData, Node nNext, Node nPrevious)
+    public Nodes(int newData, Node nNext, Node nPrevious)
     {
       data = newData;
       nNext = next;
@@ -24,11 +24,11 @@ public class MyList
     {
       return previous;
     }
-    public void Node setNext(Node input)
+    public void setNext(Node input)
     {
       next = input;
     }
-    public void Node setPrevious(Node input)
+    public void setPrevious(Node input)
     {
       previous = input;
     }
@@ -37,17 +37,20 @@ public class MyList
       data  = input;
     }
   }
+
   private int size = 0;
-  private Node start,end;
+  private Node start;
+  private Node end;
 
   public MyLinkedList(Node nStart, Node nEnd)
   {
-    start = new Node(nStart.getData(), nStart.getNext(), null);
-    end = new Node(nEnd.getData(), null, nStart.getPrevious());
-    while(nEnd.getPrevious != null)
+    Node holder;
+    start = new Node(nStart.getData(), nStart.getNext(), holder);
+    end = new Node(nEnd.getData(), holder, nStart.getPrevious());
+    while(nEnd.getPrevious() != null)
     {
       size ++;
-      nEnd = nEnd.getPrevious;
+      nEnd = nEnd.getPrevious();
     }
   }
   public int size()
@@ -58,15 +61,25 @@ public class MyList
   {
     Node setUp = new Node(value, null, end);
     end.setNext(setUp);
-    setUp.setPrevious(end);
     end = setUp;
     size ++;
     return true;
   }
+  public void add(int index, Integer value)
+  {
+    if(index > this.size())
+    {
+      throw new IndexOutOfBoundsException();
+    }
+    Node input = new Node(value, getNode(index).getNext(), getNode(index).getPrevious());
+    getNode(index).getNext().setPrevious(input);
+    getNode(index).getPrevious().setNext(input);
+    size ++;
+  }
+
   public boolean contains(int item)
   {
-    Node power = new Node(3, null, null);
-    power.setNext(start);
+    Node power = start;
     while(power.getNext() != null)
     {
         if(power.getData() == item)
@@ -79,12 +92,17 @@ public class MyList
   }
   public int remove(int index)
   {
+    if(index > this.size())
+    {
+      throw new IndexOutOfBoundsException();
+    }
+    int output = this.get(index);
     this.getNext().setPrevious(this.getPrevious());
     this.getPrevious().setNext(this.getNext());
     this.get(index).setNext(null);
     this.get(index).setPrevious(null);
     size --;
-    return this.getData();
+    return output;
   }
   public int indexOf(int value)
   {
@@ -92,8 +110,7 @@ public class MyList
     {
       return -1;
     }
-    Node power = new Node(3, null, null);
-    power.setNext(start);
+    Node power = start;
     int counter = 0;
     while( power.getData() != value)
     {
@@ -113,19 +130,31 @@ public class MyList
   }
   public Integer get(int index)
   {
-    int counter = 0;
-    Node power = new Node(3, null, null);
-    power.setNext(start);
-    while(power.getNext() != null && power.)
-    {
-      counter ++;
-    }
+    return getNode(index).getData();
+  }
+  private Node getNode(int index)
+  {
+  if(index > this.size())
+  {throw new IndexOutOfBoundsException();}
+  int counter = 0;
+  Node power = start;
+  while(counter != index)
+  { output = power.getData();
+    power = power.getNext();
+    counter ++;}
+  return power;
+}
+
+  public Integer set(int index, int value)
+  {
+    int bounce = this.get(index);
+    this.getNode(index).setData(value);
+    return bounce;
   }
 
   public String toString()
   {
-    Node power = new Node(3, null, null);
-    power.setNext(start);
+    Node power = start;
     String output = "[";
     while(power.getNext() != null)
     {
@@ -134,9 +163,5 @@ public class MyList
     }
     output += "]";
     return output;
-    power.setNext(null);
-    power.setPrevious(null);
   }
-
-
 }
