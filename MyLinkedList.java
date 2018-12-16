@@ -1,11 +1,11 @@
 public class MyLinkedList
 {
-  public class Nodes
+  public class Node
   {
     public int data;
     public Node next;
     public Node previous;
-    public Nodes(int newData, Node nNext, Node nPrevious)
+    public Node(int newData, Node nNext, Node nPrevious)
     {
       data = newData;
       nNext = next;
@@ -36,30 +36,45 @@ public class MyLinkedList
     {
       data  = input;
     }
+    public String toString(Node input)
+    {
+      String output = ("" + input.getData());
+      return output;
+    }
   }
-
   private int size = 0;
   private Node start;
   private Node end;
 
-  public MyLinkedList(Node nStart, Node nEnd)
+  public MyLinkedList()
   {
-    Node holder;
-    start = new Node(nStart.getData(), nStart.getNext(), holder);
-    end = new Node(nEnd.getData(), holder, nStart.getPrevious());
-    while(nEnd.getPrevious() != null)
-    {
-      size ++;
-      nEnd = nEnd.getPrevious();
-    }
+    size = 0;
   }
   public int size()
   {
     return size;
   }
-  public boolean add(int value);
+  public boolean add(int value)
   {
-    Node setUp = new Node(value, null, end);
+    if(size == 0)
+    {
+      Node holder = null;
+      start = new Node(value, null, holder);
+      end = start;
+      size ++;
+      return true;
+    }
+     if(size == 1)
+    {
+      Node holder = null;
+      end = new Node(value, holder, null);
+      end.setPrevious(start);
+      start.setNext(end);
+      size ++;
+      return true;
+    }
+    Node setUp = new Node(value, null, null);
+    setUp.setPrevious(end);
     end.setNext(setUp);
     end = setUp;
     size ++;
@@ -67,20 +82,30 @@ public class MyLinkedList
   }
   public void add(int index, Integer value)
   {
-    if(index > this.size())
+    if(index > this.size() || index < 0)
     {
       throw new IndexOutOfBoundsException();
     }
-    Node input = new Node(value, getNode(index).getNext(), getNode(index).getPrevious());
-    getNode(index).getNext().setPrevious(input);
-    getNode(index).getPrevious().setNext(input);
+    if(size < 2 || index == size)
+    {
+      add(value);
+    }
+    else
+    {
+    //Node input = new Node(value, getNode(index).getNext(), getNode(index));
+    Node input = new Node(value, null, null);
+    //getNode(index).getNext().setPrevious(input);
+    input.setNext(getNode(index + 1));
+    input.setPrevious(getNode(index));
+    getNode(index).setNext(input);
     size ++;
+  }
   }
 
   public boolean contains(int item)
   {
     Node power = start;
-    while(power.getNext() != null)
+    while(power != null)
     {
         if(power.getData() == item)
         {
@@ -92,17 +117,34 @@ public class MyLinkedList
   }
   public int remove(int index)
   {
-    if(index > this.size())
+    if(index > this.size() || index < 0)
     {
       throw new IndexOutOfBoundsException();
     }
-    int output = this.get(index);
-    this.getNext().setPrevious(this.getPrevious());
-    this.getPrevious().setNext(this.getNext());
-    this.get(index).setNext(null);
-    this.get(index).setPrevious(null);
+    if(index == 0)
+    {
+      int output = start.getData();
+      start = start.getNext();
+      start.setPrevious(null);
+      size --;
+      return output;
+    }
+    if(index == size - 1)
+    {
+      int output = end.getData();
+      end = end.getPrevious();
+      end.setNext(null);
+      size --;
+      return output;
+    }
+    Node output = this.getNode(index);
+    int val = output.getData();
+    output.getNext().setPrevious(output.getPrevious());
+    output.getPrevious().setNext(output.getNext());
+    output.setNext(null);
+    output.setPrevious(null);
     size --;
-    return output;
+    return val;
   }
   public int indexOf(int value)
   {
@@ -119,7 +161,7 @@ public class MyLinkedList
     }
     return counter;
   }
-  public boolean remove(int value)
+  public boolean removeValue(int value)
   {
     if(this.indexOf(value) == -1)
     {
@@ -134,19 +176,21 @@ public class MyLinkedList
   }
   private Node getNode(int index)
   {
-  if(index > this.size())
+  if(index > this.size() || index < 0)
   {throw new IndexOutOfBoundsException();}
   int counter = 0;
   Node power = start;
   while(counter != index)
-  { output = power.getData();
+  {
+    counter ++;
     power = power.getNext();
-    counter ++;}
+  }
   return power;
 }
 
   public Integer set(int index, int value)
   {
+    if(index > size || index < 0)
     int bounce = this.get(index);
     this.getNode(index).setData(value);
     return bounce;
@@ -156,7 +200,7 @@ public class MyLinkedList
   {
     Node power = start;
     String output = "[";
-    while(power.getNext() != null)
+    while(power != null)
     {
       output += (" " + power.getData() + ",");
       power = power.getNext();
