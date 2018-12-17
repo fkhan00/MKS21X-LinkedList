@@ -191,8 +191,11 @@ public class MyLinkedList
   public Integer set(int index, int value)
   {
     if(index > size || index < 0)
-    int bounce = this.get(index);
-    this.getNode(index).setData(value);
+    {
+      throw new IndexOutOfBoundsException();
+    }
+  Integer bounce = this.get(index);
+  this.getNode(index).setData(value);
     return bounce;
   }
 
@@ -207,5 +210,36 @@ public class MyLinkedList
     }
     output += "]";
     return output;
+  }
+  public Node getStart()
+  {
+    return start;
+  }
+  public Node getEnd()
+  {
+    return end;
+  }
+  public void extend(MyLinkedList other)
+  {
+    other.getStart().setPrevious(end);
+    end.setNext(other.start);
+    size += other.size;
+    end = other.getEnd();
+    other.size = 0;
+    other.start = null;
+    other.end = null;
+  }
+  public static void main(String[] args)
+  {
+    MyLinkedList test1 = new MyLinkedList();
+    MyLinkedList test2 = new MyLinkedList();
+    for(int i = 0; i < 10; i++)
+    {
+      test1.add(i);
+      test2.add(i);
+    }
+    System.out.println(test1);
+    test1.extend(test2);
+    System.out.println(test1);
   }
 }
