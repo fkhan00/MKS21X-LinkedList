@@ -260,8 +260,7 @@ public class MyLinkedList<E>
       return;}
     //constant time
     for(int j = 0; j < 20; j++){
-      sorted.extend(bucket.get(j));
-      bucket.get(j).clear();}
+      sorted.extend(bucket.get(j));}
     // n pass
     for(int j = 0; j < data.length; j++){
       data[j] = sorted.remove(0);}
