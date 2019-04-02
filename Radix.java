@@ -241,7 +241,7 @@ public class MyLinkedList<E>
 //O(2n(log(k))
   public static void radixsort(int[] data){
     ArrayList<MyLinkedList<Integer>> bucket = new ArrayList<MyLinkedList<Integer>>();
-    // n pass
+    // constant time
     for(int i = 0; i < 20; i++){
       bucket.add(new MyLinkedList<Integer>());}
     MyLinkedList<Integer> sorted = new MyLinkedList<Integer>();
@@ -256,7 +256,7 @@ public class MyLinkedList<E>
       else{
         bucket.get(9 - (data[i] % placeValue)).add(data[i]);}}
 
-    if(bucket.get(10).size == 20){
+    if(bucket.get(10).size == data.length){
       return;}
     //constant time
     for(int j = 0; j < 20; j++){
